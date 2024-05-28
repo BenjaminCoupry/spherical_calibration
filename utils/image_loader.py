@@ -5,6 +5,18 @@ import numpy as np
 
 
 
+def loader(file_list):
+    """
+    Load images from the file list, convert them to numpy arrays, and show a progress bar.
+
+    Parameters:
+    file_list (list of str): List of file paths to the images.
+
+    Returns:
+    map: A map object containing numpy arrays of the images.
+    """
+    return map(np.asarray, map(Image.open, tqdm(file_list)))
+
 def load_reduce(file_list, reducer):
     """Loads and reduces a list of image files using a reduction function.
 
@@ -15,7 +27,7 @@ def load_reduce(file_list, reducer):
     Returns:
         array: Reduced image.
     """
-    reduced_image = functools.reduce(reducer, map(np.asarray, map(Image.open, tqdm(file_list))))
+    reduced_image = functools.reduce(reducer, loader(file_list))
     return reduced_image
 
 def load_map(file_list, mapper):
@@ -28,7 +40,7 @@ def load_map(file_list, mapper):
     Returns:
        List of array: Mapped images.
     """
-    mapped_images = map(mapper, map(np.asarray, map(Image.open, tqdm(file_list))))
+    mapped_images = map(mapper, loader(file_list))
     return mapped_images
 
 def load_max_image(file_list):
